@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>18.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{2ae40c1d-1183-4e6b-8087-5ae5f47e806d}</ProjectGuid>
+    <ProjectGuid>{650F99DC-A501-9EAA-5C25-64DFC21E6E4A}</ProjectGuid>
     <RootNamespace>Group5Game</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -142,6 +142,7 @@
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="GameOverScreen.cpp" />
     <ClCompile Include="GameScreen.cpp" />
+    <ClCompile Include="NumberRenderer.cpp" />
     <ClCompile Include="Screen.h" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MenuScreen.cpp" />
@@ -149,6 +150,7 @@
   <ItemGroup>
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="GamesEngineeringBase.h" />
+    <ClInclude Include="NumberRenderer.h" />
     <ClInclude Include="Vector.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
