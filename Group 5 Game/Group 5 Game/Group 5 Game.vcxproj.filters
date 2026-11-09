@@ -16,6 +16,9 @@
     <Filter Include="Source Files\Screens">
       <UniqueIdentifier>{afac1ca8-e00d-4d5e-bea2-bc39e1f6edcc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Utils">
+      <UniqueIdentifier>{95f578ff-133b-4f28-a9bd-4702c19cb15a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -43,6 +46,9 @@
     </ClInclude>
     <ClInclude Include="GameManager.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector.h">
+      <Filter>Header Files\Utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
