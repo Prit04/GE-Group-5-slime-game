@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GamesEngineeringBase.h"
+#include "NumberRenderer.h"
 
 // Need gamemanager for some things here, can change implementation later
 // but for now this stops a recursive header read
@@ -33,6 +34,7 @@ protected:
 // Menu Screen
 class MenuScreen : public Screen
 {
+
 public:
 	MenuScreen(GamesEngineeringBase::Window& _window, GameManager& _gameManager) : Screen(_window, _gameManager)
 	{
@@ -47,6 +49,11 @@ public:
 // Game Screen
 class GameScreen : public Screen
 {
+private:
+	NumberRenderer hudRenderer{ 4, 255, 255, 255 };
+	int score = 0;
+	float elapsedTime = 0.0f;
+
 public:
 	GameScreen(GamesEngineeringBase::Window& _window, GameManager& _gameManager) : Screen(_window, _gameManager)
 	{
