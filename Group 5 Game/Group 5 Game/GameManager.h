@@ -2,6 +2,7 @@
 
 #include "GamesEngineeringBase.h"
 #include "Screen.h"
+#include "Renderer.h"
 
 // Enum for game screens
 enum class GameState
