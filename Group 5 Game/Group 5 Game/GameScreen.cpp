@@ -138,11 +138,11 @@ void GameScreen::UpdateCamera()
 // Draw calls here
 void GameScreen::Draw(GamesEngineeringBase::Window& window)
 {
-
-	collectible.Draw(window);// Draw crystals
 	
 	DrawFloor(window);
 	slime.Draw(window, camera);
+
+	collectible.Draw(window, camera);// Draw crystals
 
 	hudRenderer.drawWholeNumber(window, score, 20, 20);
 	hudRenderer.drawTime(window, static_cast<int>(elapsedTime), 20, 60);

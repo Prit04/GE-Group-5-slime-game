@@ -1,6 +1,7 @@
 
 #include "Collectible.h"
 #include <cstdlib>
+#include <algorithm>
 
 //  the xorshift random algorithm 
 unsigned int Collectible::random()
@@ -55,7 +56,7 @@ void Collectible::Update(float dt, int width, int height)
 
 
 // Reuse the blue pixel crystal appearance from my game
-void Collectible::Draw(GamesEngineeringBase::Window& window)
+void Collectible::Draw(GamesEngineeringBase::Window& window, const Vector2<float>& camera)
 {
     for (int i = 0; i < MAX_CRYSTALS; i++)
     {
@@ -74,18 +75,25 @@ void Collectible::Draw(GamesEngineeringBase::Window& window)
                 if (d > 10)
                     continue;
 
+                int screenX = ox + x - camera.x;
+                int screenY = oy + y - camera.y;
+
+                if (screenX < 0 || screenX > window.getWidth() || screenY < 0 || screenY > window.getHeight())
+                {
+                    continue;
+                }
 
                 // Draw crystal facets using different shades of blue
                 if (d >= 9)
-                    window.draw(ox + x, oy + y, 145, 103, 79);
+                    window.draw(screenX, screenY, 145, 103, 79);
                 else if (x < 11 && y < 11)
-                    window.draw(ox + x, oy + y, 151, 225, 247);
+                    window.draw(screenX, screenY, 151, 225, 247);
                 else if (x >= 11 && y < 11)
-                    window.draw(ox + x, oy + y, 220, 247, 251);
+                    window.draw(screenX, screenY, 220, 247, 251);
                 else if (x < 11)
-                    window.draw(ox + x, oy + y, 89, 183, 224);
+                    window.draw(screenX, screenY, 89, 183, 224);
                 else
-                    window.draw(ox + x, oy + y, 122, 209, 233);
+                    window.draw(screenX, screenY, 122, 209, 233);
             }
         }
     }

@@ -1,6 +1,7 @@
 
 #pragma once
 #include "GamesEngineeringBase.h"
+#include "Vector.h"
 
 
 // Random crystal spawning system
@@ -38,5 +39,5 @@ public:
     void Update(float dt, int width, int height);
 
     // Draw crystals
-    void Draw(GamesEngineeringBase::Window& window);
+    void Draw(GamesEngineeringBase::Window& window, const Vector2<float>& camera);
 };
