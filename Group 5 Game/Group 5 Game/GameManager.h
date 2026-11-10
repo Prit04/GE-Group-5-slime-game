@@ -26,6 +26,11 @@ public:
 	void Draw();
 	void Destroy();
 
+	void Quit()
+	{
+		isRunning = false;
+	}
+
 	// Used for main.cpp
 	bool IsRunning() const
 	{
