@@ -39,6 +39,15 @@ protected:
 class MenuScreen : public Screen
 {
 
+private:
+
+	// Slime character used only in the main menu
+	Slime menuSlime;
+
+	bool menuSlimeLoaded = false;
+	float bounceTimer = 0.0f;
+	bool wasMouseDown = false;
+
 public:
 	MenuScreen(GamesEngineeringBase::Window& _window, GameManager& _gameManager) : Screen(_window, _gameManager)
 	{
