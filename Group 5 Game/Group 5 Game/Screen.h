@@ -130,4 +130,7 @@ public:
 		finalScore = score;
 		finalTime = time;
 	}
+private:
+	int finalScore = 0;
+	float timeAlive = 0;
 };

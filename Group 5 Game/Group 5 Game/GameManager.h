@@ -3,6 +3,8 @@
 #include "GamesEngineeringBase.h"
 #include "Screen.h"
 #include "Renderer.h"
+#include "ScoreManager.h"
+#include "DifficultyManager.h"
 
 // Enum for game screens
 enum class GameState
@@ -47,6 +49,14 @@ public:
 	{
 		return window;
 	}
+	ScoreManager& GetScoreManager()
+	{
+		return scoreManager;
+	}
+	DifficultyManager& GetDifficulty()
+	{
+		return difficultyManager;
+	}
 private:
 	GamesEngineeringBase::Window window;
 	GamesEngineeringBase::Timer timer;
@@ -58,6 +68,9 @@ private:
 	MenuScreen menuScreen{ window, *this };
 	GameScreen gameScreen{ window, *this };
 	GameOverScreen gameOverScreen{ window, *this };
+
+	ScoreManager scoreManager;
+	DifficultyManager difficultyManager;
 
 	bool isRunning = false;
 	float deltaTime = 0.0f;

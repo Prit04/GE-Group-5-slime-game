@@ -1,5 +1,6 @@
 
 #include "Collectible.h"
+#include "ScoreManager.h"
 #include <cstdlib>
 #include <algorithm>
 
@@ -125,22 +126,32 @@ void Collectible::Draw(GamesEngineeringBase::Window& window, const Vector2<float
     }
 }
 
-
-// Check collisions between the slime and crystals
-void Collectible::CheckPickup(const Vector2<float>& playerPos)
+void Collectible::CheckHit(const Vector2<float>& otherPos, float otherRadius, ScoreManager& scoreManager)
 {
     for (int i = 0; i < MAX_CRYSTALS; i++)
     {
         if (!crystals[i].active)
-            continue;
-
-        // Calculate the distance between crystal and slime collision centres
-        float dx = (crystals[i].x + 11.0f) - playerPos.x;
-        float dy = (crystals[i].y + 11.0f) - (playerPos.y - 15.0f);
-
-        if (dx * dx + dy * dy < 25.0f * 25.0f)
         {
+            continue;
+        }
+        Vector2<float> position = { static_cast<float>(crystals[i].x + 5), static_cast<float>(crystals[i].y) + 5};
+        if (CollidesWith(otherPos, position, otherRadius))
+        {
+            scoreManager.AddScore(100);
             crystals[i].active = false;
         }
+    }
+}
+
+bool Collectible::CollidesWith(const Vector2<float>& otherPos, const Vector2<float>& position, float otherRadius)
+{
+    return (position - otherPos).Length() < radius + otherRadius;
+}
+
+void Collectible::Clear()
+{
+    for (int i = 0; i < MAX_CRYSTALS; i++)
+    {
+        crystals[i].active = false;
     }
 }

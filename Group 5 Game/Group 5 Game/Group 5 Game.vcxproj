@@ -153,11 +153,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Collectible.h" />
+    <ClInclude Include="DifficultyManager.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="GamesEngineeringBase.h" />
     <ClInclude Include="NumberRenderer.h" />
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="Projectilemanager.h" />
+    <ClInclude Include="ScoreManager.h" />
     <ClInclude Include="Slime.h" />
     <ClInclude Include="Vector.h" />
   </ItemGroup>

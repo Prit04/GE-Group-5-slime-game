@@ -3,6 +3,7 @@
 #include "GamesEngineeringBase.h"
 #include "Vector.h"
 #include "Projectile.h"
+#include "DifficultyManager.h"
 
 // spawns projectiles just outside the camera's view, aimed at a target (the slime), and updates, draws and despawns them.
 class ProjectileManager
@@ -21,6 +22,22 @@ public:
 	// despawn everything
 	void Clear();
 
+	void SetIntervalDecrease(DifficultyType type)
+	{
+		switch (type)
+		{
+		case DifficultyType::Easy:
+			IntervalDecrease = 0.005f;
+			break;
+		case DifficultyType::Medium:
+			IntervalDecrease = 0.01f;
+			break;
+		case DifficultyType::Hard:
+			IntervalDecrease = 0.02f;
+			break;
+		}
+	}
+
 private:
 	static const int MaxProjectiles = 64;
 	Projectile pool[MaxProjectiles];
@@ -33,7 +50,7 @@ private:
 	float spawnInterval = 1.0f;                // seconds between spawns at the start
 	static constexpr float StartInterval = 1.0f;
 	static constexpr float MinSpawnInterval = 0.2f;   // fastest it can get
-	static constexpr float IntervalDecrease = 0.02f;  // how much faster after each spawn
+	float IntervalDecrease = 0.02f;  // how much faster after each spawn
 	static constexpr float ProjectileSpeed = 250.0f;  // pixels per second
 	static constexpr float ProjectileRadius = 8.0f;
 	static constexpr float DespawnMargin = 150.0f;    // how far outside the view before removal

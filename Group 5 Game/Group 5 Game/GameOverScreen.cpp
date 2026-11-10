@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "Screen.h"
+#include "GameManager.h"
 
 #include "GameManager.h"
 #include <cstring>
@@ -94,6 +95,12 @@ static void DrawButton(
 // Standard init for loading images etc
 void GameOverScreen::Init()
 {
+	ScoreManager scoreManager = gameManager.GetScoreManager();
+	finalScore = scoreManager.GetScore();
+	timeAlive = scoreManager.GetTime();
+
+	// call once setting all stuff needed to display in gameover
+	scoreManager.Reset();
 	std::cout << "Game Over Screen Loaded" << std::endl;
 
 // Reset the mouse click state
