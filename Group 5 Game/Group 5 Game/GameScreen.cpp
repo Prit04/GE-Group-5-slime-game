@@ -31,6 +31,9 @@ void GameScreen::Init()
 	deathTimer = 0.0f;
 	projectiles.Init(window.getWidth(), window.getHeight());
 
+	gameManager.GetScoreManager().SetScoreMultiplier(gameManager.GetDifficulty().GetDifficultyType());
+	projectiles.SetIntervalDecrease(gameManager.GetDifficulty().GetDifficultyType());
+
 	// Only set up the slime the first time we enter the screen, so switching
 	// between screens does not teleport it back to the middle
 
@@ -42,7 +45,12 @@ void GameScreen::Init()
 	// Reset the slime whenever a new game starts
 	slime.Spawn({ WorldWidth * 0.5f, WorldHeight * 0.5f });
 
+	slime.Spawn({ WorldWidth * 0.5f, WorldHeight * 0.5f });
+	gameManager.GetScoreManager().Reset();
+
 	UpdateCamera();
+
+	collectible.Start();
 }
 
 // Loads the slime sheet once and reports which path worked
@@ -115,10 +123,15 @@ void GameScreen::HandleInput()
 // Update logic here
 void GameScreen::Update(float deltaTime)
 {
-	elapsedTime += deltaTime;
+	gameManager.GetScoreManager().Update(deltaTime);
 
-
-
+// Update random crystal spawning
+	collectible.Update(
+		deltaTime,
+		slime.GetPosition(),
+		WorldWidth,
+		WorldHeight
+	);
 	slime.Update(deltaTime, moveInput);
 
 	// Keep the slime inside the world so it never walks off the map
@@ -140,7 +153,7 @@ void GameScreen::Update(float deltaTime)
 
 	
 	// Check whether the slime collects crystals
-	collectible.CheckPickup(slime.GetPosition());
+	//collectible.CheckPickup(slime.GetPosition());
 
 	UpdateProjectiles(deltaTime);
 }
@@ -165,13 +178,14 @@ void GameScreen::Draw(GamesEngineeringBase::Window& window)
 {
 	
 	DrawFloor(window);
-	slime.Draw(window, camera);
-	projectiles.Draw(window, camera);
 
 	collectible.Draw(window, camera);// Draw crystals
 
-	hudRenderer.drawWholeNumber(window, score, 20, 20);
-	hudRenderer.drawTime(window, static_cast<int>(elapsedTime), 20, 60);
+	slime.Draw(window, camera);
+	projectiles.Draw(window, camera);
+
+	hudRenderer.drawWholeNumber(window, gameManager.GetScoreManager().GetScore(), 20, 20);
+	hudRenderer.drawTime(window, static_cast<int>(gameManager.GetScoreManager().GetTime()), 20, 60);
 
 }
 
@@ -248,7 +262,7 @@ void GameScreen::DrawFloor(GamesEngineeringBase::Window& window) const
 // Destroy pointers etc, any stuff that would cause a mem leak
 void GameScreen::Destroy()
 {
-
+	collectible.Clear();
 }
 
 // moves the projectiles, checks if they hit the slime, and handles lives / game over
@@ -290,4 +304,6 @@ void GameScreen::UpdateProjectiles(float deltaTime)
 			slime.Hurt();
 		}
 	}
+
+	collectible.CheckHit(slimeCentre, SlimeHitRadius, gameManager.GetScoreManager());
 }

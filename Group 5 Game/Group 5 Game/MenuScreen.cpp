@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "Screen.h"
+#include "GameManager.h"
 
 #include "GameManager.h"
 #include <cstring>
