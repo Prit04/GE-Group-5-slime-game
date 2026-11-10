@@ -92,5 +92,5 @@ private:
 public:
 
 	// How long the hurt pose is held before going back to normal
-	static constexpr float HurtDuration = 0.6f;
+	static constexpr float HurtDuration = 0.5f;
 };
