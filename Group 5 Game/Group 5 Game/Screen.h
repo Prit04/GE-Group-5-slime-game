@@ -4,6 +4,8 @@
 #include "NumberRenderer.h"
 #include "Slime.h"
 
+#include "Collectible.h"
+
 // Need gamemanager for some things here, can change implementation later
 // but for now this stops a recursive header read
 class GameManager;
@@ -55,6 +57,8 @@ private:
 	int score = 0;
 	float elapsedTime = 0.0f;
 
+
+	Collectible collectible;	// Crystal spawning system
 	Slime slime;
 	Vector2<float> camera{ 0.0f, 0.0f };
 	Vector2<float> moveInput{ 0.0f, 0.0f };
