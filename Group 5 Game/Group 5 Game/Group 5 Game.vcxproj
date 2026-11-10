@@ -142,6 +142,7 @@
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="GameOverScreen.cpp" />
     <ClCompile Include="GameScreen.cpp" />
+    <ClCompile Include="Slime.cpp" />
     <ClCompile Include="NumberRenderer.cpp" />
     <ClCompile Include="Screen.h" />
     <ClCompile Include="Main.cpp" />
@@ -151,6 +152,7 @@
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="GamesEngineeringBase.h" />
     <ClInclude Include="NumberRenderer.h" />
+    <ClInclude Include="Slime.h" />
     <ClInclude Include="Vector.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

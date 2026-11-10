@@ -2,6 +2,7 @@
 
 #include "GamesEngineeringBase.h"
 #include "NumberRenderer.h"
+#include "Slime.h"
 
 // Need gamemanager for some things here, can change implementation later
 // but for now this stops a recursive header read
@@ -53,6 +54,19 @@ private:
 	NumberRenderer hudRenderer{ 4, 255, 255, 255 };
 	int score = 0;
 	float elapsedTime = 0.0f;
+
+	Slime slime;
+	Vector2<float> camera{ 0.0f, 0.0f };
+	Vector2<float> moveInput{ 0.0f, 0.0f };
+	bool slimeLoaded = false;
+
+	// A small world, larger than the window, so the camera has room to follow
+	static constexpr int WorldWidth = 1600;
+	static constexpr int WorldHeight = 1200;
+
+	void LoadSlime();
+	void UpdateCamera();
+	void DrawFloor(GamesEngineeringBase::Window& window) const;
 
 public:
 	GameScreen(GamesEngineeringBase::Window& _window, GameManager& _gameManager) : Screen(_window, _gameManager)

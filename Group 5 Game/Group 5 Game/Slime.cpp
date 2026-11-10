@@ -1,0 +1,166 @@
+#include <algorithm>
+
+#include "Slime.h"
+
+// One entry per animation, in the same order as the enum
+const Slime::Animation Slime::Animations[Slime::AnimationCount] =
+{
+	{ 0, 4,  6.0f, true  },		// idle
+	{ 1, 6, 10.0f, true  },		// walk
+	{ 2, 6, 10.0f, false },		// hurt
+	{ 3, 6,  8.0f, false }		// death
+};
+
+bool Slime::Load(const std::string& filename)
+{
+	return sheet.load(filename);
+}
+
+void Slime::Spawn(const Vector2<float>& spawnPosition)
+{
+	position = spawnPosition;
+	startPosition = spawnPosition;
+	hurtTimer = 0.0f;
+	SetState(State::Idle);
+}
+
+void Slime::SetPosition(const Vector2<float>& newPosition)
+{
+	position = newPosition;
+}
+
+Vector2<float> Slime::GetPosition() const
+{
+	return position;
+}
+
+bool Slime::IsDead() const
+{
+	return state == State::Death;
+}
+
+// Called when the slime takes a hit. Ignored while it is already dead.
+void Slime::Hurt()
+{
+	if (state == State::Death)
+	{
+		return;
+	}
+
+	hurtTimer = HurtDuration;
+	SetState(State::Hurt);
+}
+
+// Plays the death animation once and stays on the last frame
+void Slime::Die()
+{
+	if (state == State::Death)
+	{
+		return;
+	}
+
+	hurtTimer = 0.0f;
+	SetState(State::Death);
+}
+
+// Puts the slime back at its starting point, ready to play again
+void Slime::Reset()
+{
+	position = startPosition;
+	hurtTimer = 0.0f;
+	SetState(State::Idle);
+}
+
+void Slime::Update(float deltaTime, const Vector2<float>& moveInput)
+{
+	AdvanceFrame(deltaTime);
+
+	// A dead slime does not move or animate any further
+	if (state == State::Death)
+	{
+		return;
+	}
+
+	// While recovering from a hit the slime cannot move
+	if (hurtTimer > 0.0f)
+	{
+		hurtTimer -= deltaTime;
+
+		if (hurtTimer <= 0.0f)
+		{
+			hurtTimer = 0.0f;
+			SetState(State::Idle);
+		}
+
+		return;
+	}
+
+	Move(deltaTime, moveInput);
+}
+
+void Slime::Move(float deltaTime, const Vector2<float>& moveInput)
+{
+	// No input means no movement, so go back to the idle animation
+	if (moveInput.Length() == 0.0f)
+	{
+		SetState(State::Idle);
+		return;
+	}
+
+	const Vector2<float> direction = moveInput.Normalised();
+	position = position + direction * (moveSpeed * deltaTime);
+
+	SetState(State::Walk);
+}
+
+void Slime::Draw(GamesEngineeringBase::Window& window, const Vector2<float>& camera) const
+{
+	const Animation& animation = Animations[CurrentAnimation()];
+
+	// The frame we want inside the sheet
+	const int sourceX = frame * FrameSize;
+	const int sourceY = animation.row * FrameSize;
+
+	// Screen position: world position minus the camera, anchored on the feet
+	const int screenX = static_cast<int>(position.x) - FeetX - static_cast<int>(camera.x);
+	const int screenY = static_cast<int>(position.y) - FeetY - static_cast<int>(camera.y);
+
+	DrawImageRegion(window, sheet, sourceX, sourceY, FrameSize, FrameSize, screenX, screenY);
+}
+
+void Slime::SetState(State newState)
+{
+	if (state == newState)
+	{
+		return;
+	}
+
+	state = newState;
+	frame = 0;
+	frameTime = 0.0f;
+}
+
+void Slime::AdvanceFrame(float deltaTime)
+{
+	const Animation& animation = Animations[CurrentAnimation()];
+
+	frameTime += deltaTime;
+
+	// Frames are picked from time, not from rendered frames, so the animation
+	// plays at the same speed whatever the frame rate is
+	const int frameIndex = static_cast<int>(frameTime * animation.fps);
+
+	if (animation.loop)
+	{
+		frame = frameIndex % animation.frames;
+	}
+	else
+	{
+		frame = std::min(frameIndex, animation.frames - 1);
+	}
+}
+
+int Slime::CurrentAnimation() const
+{
+	return static_cast<int>(state);
+}
