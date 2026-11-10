@@ -152,7 +152,7 @@ void GameScreen::Draw(GamesEngineeringBase::Window& window)
 
 	collectible.Draw(window, camera);// Draw crystals
 
-	hudRenderer.drawWholeNumber(window, score, 20, 20);
+	hudRenderer.drawWholeNumber(window, gameManager.GetScoreManager().GetScore(), 20, 20);
 	hudRenderer.drawTime(window, static_cast<int>(gameManager.GetScoreManager().GetTime()), 20, 60);
 
 }
@@ -272,4 +272,6 @@ void GameScreen::UpdateProjectiles(float deltaTime)
 			slime.Hurt();
 		}
 	}
+
+	collectible.CheckHit(slimeCentre, SlimeHitRadius, gameManager.GetScoreManager());
 }
