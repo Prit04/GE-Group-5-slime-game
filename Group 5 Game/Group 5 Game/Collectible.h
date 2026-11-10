@@ -27,16 +27,24 @@ private:
     // Generate a random number
     unsigned int random();
 
-    // Spawn one crystal at a random position
-    void spawnCrystal(int width, int height);
+
+    // Spawn a crystal near the player
+    void spawnCrystal(const Vector2<float>& playerPos,
+        int worldWidth, int worldHeight);
 
 public:
 
     // Start automatic spawning
     void Start();
 
-    // Update the automatic spawn timer
-    void Update(float dt, int width, int height);
+
+    // Update crystal spawning using the player position
+    void Update(float dt, const Vector2<float>& playerPos,
+        int worldWidth, int worldHeight);
+
+
+    // Check whether the player collects a crystal
+    void CheckPickup(const Vector2<float>& playerPos);
 
     // Draw crystals
     void Draw(GamesEngineeringBase::Window& window, const Vector2<float>& camera);

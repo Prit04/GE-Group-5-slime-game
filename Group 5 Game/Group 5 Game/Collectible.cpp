@@ -20,27 +20,53 @@ void Collectible::Start()
 }
 
 
-// Spawn one crystal at a random position
-void Collectible::spawnCrystal(int width, int height)
-{
-    if (width < 32 || height < 32)
-        return;
 
+// Spawn crystals at random positions near the player
+void Collectible::spawnCrystal(
+    const Vector2<float>& playerPos,
+    int worldWidth, int worldHeight)
+{
     for (int i = 0; i < MAX_CRYSTALS; i++)
     {
         if (!crystals[i].active)
         {
-            crystals[i].x = random() % (width - 24);
-            crystals[i].y = random() % (height - 24);
-            crystals[i].active = true;
+       
+            // Choose a random position around the player
+            for (int attempt = 0; attempt < 30; attempt++)
+            {
+                int dx = static_cast<int>(random() % 401) - 200;
+                int dy = static_cast<int>(random() % 401) - 200;
+
+             
+                // Avoid spawning too close to the player
+                if (dx * dx + dy * dy < 70 * 70)
+                    continue;
+
+                int x = static_cast<int>(playerPos.x) + dx;
+                int y = static_cast<int>(playerPos.y) + dy;
+
+                // Keep crystals inside the world boundaries
+                if (x < 0 || y < 0 ||
+                    x + 22 >= worldWidth ||
+                    y + 22 >= worldHeight)
+                    continue;
+
+                crystals[i].x = x;
+                crystals[i].y = y;
+                crystals[i].active = true;
+                return;
+            }
+
             return;
         }
     }
 }
 
 
-// Spawn one crystal every 3 seconds after activation
-void Collectible::Update(float dt, int width, int height)
+// Spawn a crystal near the player every 3 seconds
+void Collectible::Update(
+    float dt, const Vector2<float>& playerPos,
+    int worldWidth, int worldHeight)
 {
     if (!spawning)
         return;
@@ -50,7 +76,7 @@ void Collectible::Update(float dt, int width, int height)
     if (spawnTimer >= 3.0f)
     {
         spawnTimer = 0.0f;
-        spawnCrystal(width, height);
+        spawnCrystal(playerPos, worldWidth, worldHeight);
     }
 }
 
@@ -95,6 +121,26 @@ void Collectible::Draw(GamesEngineeringBase::Window& window, const Vector2<float
                 else
                     window.draw(screenX, screenY, 122, 209, 233);
             }
+        }
+    }
+}
+
+
+// Check collisions between the slime and crystals
+void Collectible::CheckPickup(const Vector2<float>& playerPos)
+{
+    for (int i = 0; i < MAX_CRYSTALS; i++)
+    {
+        if (!crystals[i].active)
+            continue;
+
+        // Calculate the distance between crystal and slime collision centres
+        float dx = (crystals[i].x + 11.0f) - playerPos.x;
+        float dy = (crystals[i].y + 11.0f) - (playerPos.y - 15.0f);
+
+        if (dx * dx + dy * dy < 25.0f * 25.0f)
+        {
+            crystals[i].active = false;
         }
     }
 }

@@ -22,6 +22,10 @@ void GameScreen::Init()
 	score = 0;
 	elapsedTime = 0.0f;
 
+
+// Start spawning crystals automatically when gameplay begins
+	collectible.Start();
+
 	lives = 3;
 	invincibleTimer = 0.0f;
 	deathTimer = 0.0f;
@@ -29,11 +33,14 @@ void GameScreen::Init()
 
 	// Only set up the slime the first time we enter the screen, so switching
 	// between screens does not teleport it back to the middle
+
+// Load the slime sprite only once
 	if (!slimeLoaded)
 	{
 		LoadSlime();
-		slime.Spawn({ WorldWidth * 0.5f, WorldHeight * 0.5f });
 	}
+	// Reset the slime whenever a new game starts
+	slime.Spawn({ WorldWidth * 0.5f, WorldHeight * 0.5f });
 
 	UpdateCamera();
 }
@@ -67,10 +74,10 @@ void GameScreen::HandleInput()
 
 
 // Press G to start automatic crystal spawning
-	if (window.keyPressed('G'))
+	/*if (window.keyPressed('G'))
 	{
 		collectible.Start();
-	}
+	}*/
 
 
 	if (window.keyPressed('W') || window.keyPressed(VK_UP))
@@ -111,12 +118,7 @@ void GameScreen::Update(float deltaTime)
 	elapsedTime += deltaTime;
 
 
-// Update random crystal spawning
-	collectible.Update(
-		deltaTime,
-		window.getWidth(),
-		window.getHeight()
-	);
+
 	slime.Update(deltaTime, moveInput);
 
 	// Keep the slime inside the world so it never walks off the map
@@ -127,12 +129,27 @@ void GameScreen::Update(float deltaTime)
 
 	UpdateCamera();
 
+
+// Spawn crystals near the slime
+	collectible.Update(
+		deltaTime,
+		slime.GetPosition(),
+		WorldWidth,
+		WorldHeight
+	);
+
+	
+	// Check whether the slime collects crystals
+	collectible.CheckPickup(slime.GetPosition());
+
 	UpdateProjectiles(deltaTime);
 }
 
 // Camera follows the slime and stops at the edges of the world
 void GameScreen::UpdateCamera()
 {
+
+
 	const float halfWidth = static_cast<float>(window.getWidth()) * 0.5f;
 	const float halfHeight = static_cast<float>(window.getHeight()) * 0.5f;
 

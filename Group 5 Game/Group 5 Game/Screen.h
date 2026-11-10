@@ -93,10 +93,25 @@ public:
 	void Update(float deltaTime) override;
 	void Draw(GamesEngineeringBase::Window& window) override;
 	void Destroy() override;
+
+	
+// Get the game score
+	int GetScore() const { return score; }
+
+	// Get the survival time
+	float GetElapsedTime() const { return elapsedTime; }
 };
 
 class GameOverScreen : public Screen
 {
+
+
+private:
+	NumberRenderer resultRenderer{ 4, 255, 255, 255 };
+	int finalScore = 0;
+	float finalTime = 0.0f;
+	bool wasMouseDown = false;
+
 public:
 	GameOverScreen(GamesEngineeringBase::Window& _window, GameManager& _gameManager) : Screen(_window, _gameManager)
 	{
@@ -107,4 +122,12 @@ public:
 	void Update(float deltaTime) override;
 	void Draw(GamesEngineeringBase::Window& window) override;
 	void Destroy() override;
+
+
+// Store the final game results
+	void SetResults(int score, float time)
+	{
+		finalScore = score;
+		finalTime = time;
+	}
 };
