@@ -46,4 +46,6 @@ public:
     void Draw(GamesEngineeringBase::Window& window, const Vector2<float>& camera);
 
     void CheckHit(const Vector2<float>& pos, float radius, ScoreManager& scoreManager);
+
+    void Clear();
 };

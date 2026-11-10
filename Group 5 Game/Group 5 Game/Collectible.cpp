@@ -108,7 +108,7 @@ void Collectible::CheckHit(const Vector2<float>& otherPos, float otherRadius, Sc
         {
             continue;
         }
-        Vector2<float> position = { static_cast<float>(crystals[i].x), static_cast<float>(crystals[i].y) };
+        Vector2<float> position = { static_cast<float>(crystals[i].x + 5), static_cast<float>(crystals[i].y) + 5};
         if (CollidesWith(otherPos, position, otherRadius))
         {
             scoreManager.AddScore(100);
@@ -120,4 +120,12 @@ void Collectible::CheckHit(const Vector2<float>& otherPos, float otherRadius, Sc
 bool Collectible::CollidesWith(const Vector2<float>& otherPos, const Vector2<float>& position, float otherRadius)
 {
     return (position - otherPos).Length() < radius + otherRadius;
+}
+
+void Collectible::Clear()
+{
+    for (int i = 0; i < MAX_CRYSTALS; i++)
+    {
+        crystals[i].active = false;
+    }
 }

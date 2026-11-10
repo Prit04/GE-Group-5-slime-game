@@ -1,13 +1,7 @@
 #pragma once
 
 #include <iostream>
-
-enum class DifficultyType
-{
-	Easy,
-	Medium,
-	Hard
-};
+#include "DifficultyManager.h"
 
 class ScoreManager
 {
@@ -25,7 +19,6 @@ public:
 	{
 		time = 0.0f;
 		score = 0;
-		scoreMultiplier = 1.0f;
 	}
 
 	void SetScoreMultiplier(DifficultyType difficulty)
