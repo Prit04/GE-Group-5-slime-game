@@ -39,6 +39,10 @@
     <ClCompile Include="GameOverScreen.cpp">
       <Filter>Source Files\Screens</Filter>
     </ClCompile>
+    <ClCompile Include="NumberRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Collectible.cpp">
     <ClCompile Include="Slime.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -53,6 +57,10 @@
     <ClInclude Include="Vector.h">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="NumberRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Collectible.h">
     <ClInclude Include="Slime.h">
       <Filter>Header Files</Filter>
     </ClInclude>

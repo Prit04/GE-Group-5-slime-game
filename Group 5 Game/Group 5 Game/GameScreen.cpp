@@ -65,6 +65,14 @@ void GameScreen::HandleInput()
 {
 	moveInput.Set(0.0f, 0.0f);
 
+
+// Press G to start automatic crystal spawning
+	if (window.keyPressed('G'))
+	{
+		collectible.Start();
+	}
+
+
 	if (window.keyPressed('W') || window.keyPressed(VK_UP))
 	{
 		moveInput.y -= 1.0f;
@@ -102,6 +110,13 @@ void GameScreen::Update(float deltaTime)
 {
 	elapsedTime += deltaTime;
 
+
+// Update random crystal spawning
+	collectible.Update(
+		deltaTime,
+		window.getWidth(),
+		window.getHeight()
+	);
 	slime.Update(deltaTime, moveInput);
 
 	// Keep the slime inside the world so it never walks off the map
@@ -131,12 +146,16 @@ void GameScreen::UpdateCamera()
 // Draw calls here
 void GameScreen::Draw(GamesEngineeringBase::Window& window)
 {
+	
 	DrawFloor(window);
 	slime.Draw(window, camera);
 	projectiles.Draw(window, camera);
 
+	collectible.Draw(window, camera);// Draw crystals
+
 	hudRenderer.drawWholeNumber(window, score, 20, 20);
 	hudRenderer.drawTime(window, static_cast<int>(elapsedTime), 20, 60);
+
 }
 
 // A cheap grid so the camera movement is visible. It is drawn in world space,
