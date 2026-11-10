@@ -142,6 +142,8 @@
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="GameOverScreen.cpp" />
     <ClCompile Include="GameScreen.cpp" />
+    <ClCompile Include="Projectile.cpp" />
+    <ClCompile Include="Projectilemanager.cpp" />
     <ClCompile Include="Slime.cpp" />
     <ClCompile Include="NumberRenderer.cpp" />
     <ClCompile Include="Screen.h" />
@@ -152,6 +154,8 @@
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="GamesEngineeringBase.h" />
     <ClInclude Include="NumberRenderer.h" />
+    <ClInclude Include="Projectile.h" />
+    <ClInclude Include="Projectilemanager.h" />
     <ClInclude Include="Slime.h" />
     <ClInclude Include="Vector.h" />
   </ItemGroup>

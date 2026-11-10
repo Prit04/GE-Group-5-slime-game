@@ -2,6 +2,7 @@
 #include <iostream>
 
 #include "Screen.h"
+#include "GameManager.h"
 
 // The sprite sheet lives in the shared Assets folder, which is one level above
 // the project folder. A few candidates are tried so the game also runs when it
@@ -20,6 +21,11 @@ void GameScreen::Init()
 
 	score = 0;
 	elapsedTime = 0.0f;
+
+	lives = 3;
+	invincibleTimer = 0.0f;
+	deathTimer = 0.0f;
+	projectiles.Init(window.getWidth(), window.getHeight());
 
 	// Only set up the slime the first time we enter the screen, so switching
 	// between screens does not teleport it back to the middle
@@ -105,6 +111,8 @@ void GameScreen::Update(float deltaTime)
 	slime.SetPosition(position);
 
 	UpdateCamera();
+
+	UpdateProjectiles(deltaTime);
 }
 
 // Camera follows the slime and stops at the edges of the world
@@ -125,6 +133,7 @@ void GameScreen::Draw(GamesEngineeringBase::Window& window)
 {
 	DrawFloor(window);
 	slime.Draw(window, camera);
+	projectiles.Draw(window, camera);
 
 	hudRenderer.drawWholeNumber(window, score, 20, 20);
 	hudRenderer.drawTime(window, static_cast<int>(elapsedTime), 20, 60);
@@ -204,4 +213,45 @@ void GameScreen::DrawFloor(GamesEngineeringBase::Window& window) const
 void GameScreen::Destroy()
 {
 
+}
+
+// moves the projectiles, checks if they hit the slime, and handles lives / game over
+void GameScreen::UpdateProjectiles(float deltaTime)
+{
+	const Vector2<float> slimeCentre = slime.GetPosition() - Vector2<float>(0.0f, SlimeCentreOffsetY);
+
+	projectiles.Update(deltaTime, slimeCentre, camera);
+
+	// Once dead, wait for the death animation then go to game over
+	if (slime.IsDead())
+	{
+		deathTimer += deltaTime;
+		if (deathTimer >= 1.0f)
+		{
+			gameManager.SetState(GameState::GameOver);
+		}
+		return;
+	}
+
+	// short invincibility after a hit
+	if (invincibleTimer > 0.0f)
+	{
+		invincibleTimer -= deltaTime;
+		return;
+	}
+
+	if (projectiles.CheckHit(slimeCentre, SlimeHitRadius))
+	{
+		lives--;
+		invincibleTimer = Slime::HurtDuration;
+
+		if (lives <= 0)
+		{
+			slime.Die();
+		}
+		else
+		{
+			slime.Hurt();
+		}
+	}
 }

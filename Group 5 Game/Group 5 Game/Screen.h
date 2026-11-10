@@ -3,6 +3,7 @@
 #include "GamesEngineeringBase.h"
 #include "NumberRenderer.h"
 #include "Slime.h"
+#include "ProjectileManager.h"
 
 // Need gamemanager for some things here, can change implementation later
 // but for now this stops a recursive header read
@@ -59,6 +60,17 @@ private:
 	Vector2<float> camera{ 0.0f, 0.0f };
 	Vector2<float> moveInput{ 0.0f, 0.0f };
 	bool slimeLoaded = false;
+
+	ProjectileManager projectiles;
+	int lives = 3;
+	float invincibleTimer = 0.0f;
+	float deathTimer = 0.0f;
+
+	// rough hit circle for the slime
+	static constexpr float SlimeHitRadius = 14.0f;
+	static constexpr float SlimeCentreOffsetY = 15.0f;
+
+	void UpdateProjectiles(float deltaTime);
 
 	// A small world, larger than the window, so the camera has room to follow
 	static constexpr int WorldWidth = 1600;
