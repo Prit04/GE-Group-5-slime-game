@@ -14,19 +14,39 @@ void GameScreen::Init()
 void GameScreen::HandleInput()
 {
 
+
+// Press G to start automatic crystal spawning
+	if (window.keyPressed('G'))
+	{
+		collectible.Start();
+	}
+
+
 }
 
 // Update logic here
 void GameScreen::Update(float deltaTime)
 {
 	elapsedTime += deltaTime;
+
+
+// Update random crystal spawning
+	collectible.Update(
+		deltaTime,
+		window.getWidth(),
+		window.getHeight()
+	);
 }
 
 // Draw calls here
 void GameScreen::Draw(GamesEngineeringBase::Window& window)
 {
+
+	collectible.Draw(window);// Draw crystals
+	
 	hudRenderer.drawWholeNumber(window, score, 20, 20);
 	hudRenderer.drawTime(window, static_cast<int>(elapsedTime), 20, 60);
+
 }
 
 // Destroy pointers etc, any stuff that would cause a mem leak

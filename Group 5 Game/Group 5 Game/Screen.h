@@ -3,6 +3,8 @@
 #include "GamesEngineeringBase.h"
 #include "NumberRenderer.h"
 
+#include "Collectible.h"
+
 // Need gamemanager for some things here, can change implementation later
 // but for now this stops a recursive header read
 class GameManager;
@@ -53,6 +55,9 @@ private:
 	NumberRenderer hudRenderer{ 4, 255, 255, 255 };
 	int score = 0;
 	float elapsedTime = 0.0f;
+
+
+	Collectible collectible;	// Crystal spawning system
 
 public:
 	GameScreen(GamesEngineeringBase::Window& _window, GameManager& _gameManager) : Screen(_window, _gameManager)
