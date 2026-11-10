@@ -107,4 +107,7 @@ public:
 	void Update(float deltaTime) override;
 	void Draw(GamesEngineeringBase::Window& window) override;
 	void Destroy() override;
+private:
+	int finalScore = 0;
+	float timeAlive = 0;
 };
