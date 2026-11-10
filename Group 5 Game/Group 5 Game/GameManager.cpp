@@ -91,13 +91,6 @@ void GameManager::ChangeScreen()
 		currentScreen = &gameScreen;
 		break;
 	case GameState::GameOver:
-
-	
-// Pass the game results to the Game Over screen
-		gameOverScreen.SetResults(
-			gameScreen.GetScore(),
-			gameScreen.GetElapsedTime()
-		);
 		currentScreen = &gameOverScreen;
 		break;
 	}

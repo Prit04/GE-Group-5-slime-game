@@ -128,6 +128,7 @@ void GameScreen::Update(float deltaTime)
 // Update random crystal spawning
 	collectible.Update(
 		deltaTime,
+		slime.GetPosition(),
 		WorldWidth,
 		WorldHeight
 	);
@@ -152,7 +153,7 @@ void GameScreen::Update(float deltaTime)
 
 	
 	// Check whether the slime collects crystals
-	collectible.CheckPickup(slime.GetPosition());
+	//collectible.CheckPickup(slime.GetPosition());
 
 	UpdateProjectiles(deltaTime);
 }

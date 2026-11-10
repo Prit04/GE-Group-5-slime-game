@@ -174,7 +174,7 @@ void GameOverScreen::Draw(GamesEngineeringBase::Window& window)
     DrawText(window, "TIME",250, 420, 4, 180, 220, 255);
 
     resultRenderer.drawTime(
-        window, static_cast<int>(finalTime), 500, 420);
+        window, static_cast<int>(timeAlive), 500, 420);
 
     DrawButton(window, 362, 510, 300, 56, 255, 105, 70);
 
