@@ -108,8 +108,7 @@ void GameScreen::HandleInput()
 // Update logic here
 void GameScreen::Update(float deltaTime)
 {
-	elapsedTime += deltaTime;
-
+	gameManager.GetScoreManager().Update(deltaTime);
 
 // Update random crystal spawning
 	collectible.Update(
@@ -154,7 +153,7 @@ void GameScreen::Draw(GamesEngineeringBase::Window& window)
 	collectible.Draw(window, camera);// Draw crystals
 
 	hudRenderer.drawWholeNumber(window, score, 20, 20);
-	hudRenderer.drawTime(window, static_cast<int>(elapsedTime), 20, 60);
+	hudRenderer.drawTime(window, static_cast<int>(gameManager.GetScoreManager().GetTime()), 20, 60);
 
 }
 
