@@ -52,6 +52,10 @@ public:
 	Vector2<float> GetPosition() const;
 	bool IsDead() const;
 
+	// Size of the slime (1.0 = normal). The slime grows/shrinks smoothly toward the target
+	void SetTargetScale(float newScale);
+	float GetScale() const;
+
 private:
 
 	// One row of the sheet
@@ -88,6 +92,10 @@ private:
 	float hurtTimer = 0.0f;
 
 	float moveSpeed = 120.0f;		// pixels per second
+
+	float scale = 1.0f;          // current drawn size
+	float targetScale = 1.0f;    // size it's growing/shrinking toward
+	static constexpr float ScaleSpeed = 8.0f;   // how quickly it changes size
 
 public:
 

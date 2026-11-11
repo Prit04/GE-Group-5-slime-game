@@ -26,7 +26,7 @@ void GameScreen::Init()
 // Start spawning crystals automatically when gameplay begins
 	collectible.Start();
 
-	lives = 3;
+	lives = StartLives;
 	invincibleTimer = 0.0f;
 	deathTimer = 0.0f;
 	projectiles.Init(window.getWidth(), window.getHeight());
@@ -266,14 +266,17 @@ void GameScreen::Destroy()
 	collectible.Clear();
 }
 
-// moves the projectiles, checks if they hit the slime, and handles lives / game over
+// moves projectiles, handles crystal pickups and hits, and links health to the slime's size
 void GameScreen::UpdateProjectiles(float deltaTime)
 {
-	const Vector2<float> slimeCentre = slime.GetPosition() - Vector2<float>(0.0f, SlimeCentreOffsetY);
+	// the hitbox grows and shrinks with the sprite
+	const float scale = slime.GetScale();
+	const float hitRadius = SlimeHitRadius * scale;
+	const Vector2<float> slimeCentre = slime.GetPosition() - Vector2<float>(0.0f, SlimeCentreOffsetY * scale);
 
 	projectiles.Update(deltaTime, slimeCentre, camera);
 
-	// Once dead, wait for the death animation then go to game over
+	// once dead, wait for the death animation then go to game over
 	if (slime.IsDead())
 	{
 		deathTimer += deltaTime;
@@ -284,6 +287,19 @@ void GameScreen::UpdateProjectiles(float deltaTime)
 		return;
 	}
 
+	// collecting crystals heals the slime and makes it bigger
+	// (checked before the invincibility return, so you can still collect while flashing)
+	const int collected = collectible.CheckHit(slimeCentre, hitRadius, gameManager.GetScoreManager());
+	if (collected > 0)
+	{
+		lives += collected;
+		if (lives > MaxLives)
+		{
+			lives = MaxLives;
+		}
+		UpdateSlimeSize();
+	}
+
 	// short invincibility after a hit
 	if (invincibleTimer > 0.0f)
 	{
@@ -291,7 +307,8 @@ void GameScreen::UpdateProjectiles(float deltaTime)
 		return;
 	}
 
-	if (projectiles.CheckHit(slimeCentre, SlimeHitRadius))
+	// Getting hit loses health and makes the slime smaller
+	if (projectiles.CheckHit(slimeCentre, hitRadius))
 	{
 		lives--;
 		invincibleTimer = Slime::HurtDuration;
@@ -303,8 +320,13 @@ void GameScreen::UpdateProjectiles(float deltaTime)
 		else
 		{
 			slime.Hurt();
+			UpdateSlimeSize();
 		}
 	}
+}
 
-	collectible.CheckHit(slimeCentre, SlimeHitRadius, gameManager.GetScoreManager());
+// Size is based on health: 3 lives = normal, each extra life = 20% bigger, each lost life = 20% smaller
+void GameScreen::UpdateSlimeSize()
+{
+	slime.SetTargetScale(1.0f + (lives - StartLives) * SizePerLife);
 }

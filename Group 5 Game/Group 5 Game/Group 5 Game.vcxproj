@@ -159,6 +159,7 @@
     <ClInclude Include="NumberRenderer.h" />
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="Projectilemanager.h" />
+    <ClInclude Include="Renderer.h" />
     <ClInclude Include="ScoreManager.h" />
     <ClInclude Include="Slime.h" />
     <ClInclude Include="Vector.h" />
