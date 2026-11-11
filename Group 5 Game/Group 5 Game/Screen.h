@@ -84,6 +84,7 @@ private:
 
 	ProjectileManager projectiles;
 	int lives = 3;
+	int collectedTotal = 0;
 	float invincibleTimer = 0.0f;
 	float deathTimer = 0.0f;
 
