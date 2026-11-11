@@ -105,6 +105,14 @@ void GameScreen::HandleInput()
 		moveInput.x += 1.0f;
 	}
 
+	if (window.keyPressed(VK_SHIFT))
+	{
+		if (slime.TryDash())
+		{
+			lives--;
+		}
+	}
+
 	// These are edge triggered, so one press gives one animation
 	if (window.keyPressed('H'))
 	{

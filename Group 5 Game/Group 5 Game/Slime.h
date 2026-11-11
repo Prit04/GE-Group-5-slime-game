@@ -46,6 +46,8 @@ public:
 	void Die();
 	void Reset();
 
+	bool TryDash();
+
 	// Spawn places the slime and remembers where "home" is, so Reset can go back
 	void Spawn(const Vector2<float>& spawnPosition);
 	void SetPosition(const Vector2<float>& newPosition);
@@ -96,6 +98,13 @@ private:
 	float scale = 1.0f;          // current drawn size
 	float targetScale = 1.0f;    // size it's growing/shrinking toward
 	static constexpr float ScaleSpeed = 8.0f;   // how quickly it changes size
+
+	float speedMultiplier = 1.0f;
+	float dashTimer = 0.0f;
+	float dashCooldown = 3.0f;
+	float dashDuration = 0.0f;
+	bool isDashing = false;
+	bool canDash = true;
 
 public:
 
