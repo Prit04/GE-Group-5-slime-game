@@ -292,6 +292,12 @@ void GameScreen::UpdateProjectiles(float deltaTime)
 	const int collected = collectible.CheckHit(slimeCentre, hitRadius, gameManager.GetScoreManager());
 	if (collected > 0)
 	{
+		collectedTotal += collected;
+		if (collectedTotal % 3 != 0)
+		{
+			return;
+		}
+
 		lives += collected;
 		if (lives > MaxLives)
 		{
