@@ -75,7 +75,32 @@ void Slime::Reset()
 
 void Slime::Update(float deltaTime, const Vector2<float>& moveInput)
 {
+	if (dashTimer > 0)
+	{
+		dashTimer -= deltaTime;
+		if (dashTimer <= 0)
+		{
+			canDash = true;
+		}
+	}
 
+	if (dashDuration > 0)
+	{
+		dashDuration -= deltaTime;
+		if (dashDuration <= 0)
+		{
+			isDashing = false;
+		}
+	}
+
+	if (isDashing)
+	{
+		speedMultiplier = 2.5f;
+	}
+	else
+	{
+		speedMultiplier = 1.0f;
+	}
 
 	// Move the size a bit closer to the target each frame, for a smooth grow/shrink
 	scale += (targetScale - scale) * std::min(1.0f, ScaleSpeed * deltaTime);
@@ -115,9 +140,29 @@ void Slime::Move(float deltaTime, const Vector2<float>& moveInput)
 	}
 
 	const Vector2<float> direction = moveInput.Normalised();
-	position = position + direction * (moveSpeed * deltaTime);
+	position = position + direction * (moveSpeed * speedMultiplier * deltaTime);
 
 	SetState(State::Walk);
+}
+
+bool Slime::TryDash()
+{
+	if (!canDash)
+	{
+		return false;
+	}
+	if (targetScale <= 0.6f)
+	{
+		return false;
+	}
+
+	targetScale -= 0.2f;
+	canDash = false;
+	isDashing = true;
+	dashTimer = dashCooldown;
+	dashDuration = 1.0f;
+
+	return true;
 }
 
 void Slime::Draw(GamesEngineeringBase::Window& window, const Vector2<float>& camera) const
