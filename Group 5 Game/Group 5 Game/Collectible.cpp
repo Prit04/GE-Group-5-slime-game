@@ -105,7 +105,7 @@ void Collectible::Draw(GamesEngineeringBase::Window& window, const Vector2<float
                 int screenX = ox + x - camera.x;
                 int screenY = oy + y - camera.y;
 
-                if (screenX < 0 || screenX > window.getWidth() || screenY < 0 || screenY > window.getHeight())
+                if (screenX < 0 || screenX >= window.getWidth() || screenY < 0 || screenY >= window.getHeight())
                 {
                     continue;
                 }

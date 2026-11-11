@@ -184,8 +184,9 @@ void GameScreen::Draw(GamesEngineeringBase::Window& window)
 	slime.Draw(window, camera);
 	projectiles.Draw(window, camera);
 
-	hudRenderer.drawWholeNumber(window, gameManager.GetScoreManager().GetScore(), 20, 20);
-	hudRenderer.drawTime(window, static_cast<int>(gameManager.GetScoreManager().GetTime()), 20, 60);
+	hudRenderer.drawWholeNumber(window, lives, 20, 20);
+	hudRenderer.drawWholeNumber(window, gameManager.GetScoreManager().GetScore(), 20, 60);
+	hudRenderer.drawTime(window, static_cast<int>(gameManager.GetScoreManager().GetTime()), 20, 100);
 
 }
 
