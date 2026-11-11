@@ -63,6 +63,14 @@ public:
 class GameScreen : public Screen
 {
 private:
+
+	// Health / size settings
+	static constexpr int StartLives = 3;
+	static constexpr int MaxLives = 6;
+	static constexpr float SizePerLife = 0.2f;   // each life above/below 3 = 20% bigger/smaller
+
+	void UpdateSlimeSize();
+
 	NumberRenderer hudRenderer{ 4, 255, 255, 255 };
 	int score = 0;
 	float elapsedTime = 0.0f;

@@ -22,6 +22,8 @@ void Slime::Spawn(const Vector2<float>& spawnPosition)
 	startPosition = spawnPosition;
 	hurtTimer = 0.0f;
 	SetState(State::Idle);
+	scale = 1.0f;
+	targetScale = 1.0f;
 }
 
 void Slime::SetPosition(const Vector2<float>& newPosition)
@@ -73,6 +75,11 @@ void Slime::Reset()
 
 void Slime::Update(float deltaTime, const Vector2<float>& moveInput)
 {
+
+
+	// Move the size a bit closer to the target each frame, for a smooth grow/shrink
+	scale += (targetScale - scale) * std::min(1.0f, ScaleSpeed * deltaTime);
+
 	AdvanceFrame(deltaTime);
 
 	// A dead slime does not move or animate any further
@@ -122,10 +129,10 @@ void Slime::Draw(GamesEngineeringBase::Window& window, const Vector2<float>& cam
 	const int sourceY = animation.row * FrameSize;
 
 	// Screen position: world position minus the camera, anchored on the feet
-	const int screenX = static_cast<int>(position.x) - FeetX - static_cast<int>(camera.x);
-	const int screenY = static_cast<int>(position.y) - FeetY - static_cast<int>(camera.y);
+	const int screenX = static_cast<int>(position.x - FeetX * scale - camera.x);
+	const int screenY = static_cast<int>(position.y - FeetY * scale - camera.y);
 
-	DrawImageRegion(window, sheet, sourceX, sourceY, FrameSize, FrameSize, screenX, screenY);
+	DrawImageRegionScaled(window, sheet, sourceX, sourceY, FrameSize, FrameSize, screenX, screenY, scale);
 }
 
 void Slime::SetState(State newState)
@@ -163,4 +170,14 @@ void Slime::AdvanceFrame(float deltaTime)
 int Slime::CurrentAnimation() const
 {
 	return static_cast<int>(state);
+}
+
+void Slime::SetTargetScale(float newScale)
+{
+	targetScale = newScale;
+}
+
+float Slime::GetScale() const
+{
+	return scale;
 }

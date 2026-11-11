@@ -106,3 +106,57 @@ inline void DrawImageRegion(GamesEngineeringBase::Window& window,
 		}
 	}
 }
+
+// same as DrawImageRegion, but stretched by scale (1.0 = normal size).
+// each screen pixel looks up the matching pixel in the sheet (nearest neighbour), so pixel art stays sharp.
+inline void DrawImageRegionScaled(GamesEngineeringBase::Window& window,
+	const GamesEngineeringBase::Image& image,
+	int sourceX, int sourceY, int sourceWidth, int sourceHeight,
+	int x, int y, float scale)
+{
+	if (image.data == nullptr || scale <= 0.0f)
+	{
+		return;
+	}
+
+	const int destWidth = static_cast<int>(sourceWidth * scale);
+	const int destHeight = static_cast<int>(sourceHeight * scale);
+
+	for (int dy = 0; dy < destHeight; dy++)
+	{
+		const int screenY = y + dy;
+		if (screenY < 0 || screenY >= static_cast<int>(window.getHeight()))
+		{
+			continue;
+		}
+
+		const int sourceYRow = sourceY + static_cast<int>(dy / scale);
+		if (sourceYRow < 0 || sourceYRow >= static_cast<int>(image.height))
+		{
+			continue;
+		}
+
+		for (int dx = 0; dx < destWidth; dx++)
+		{
+			const int screenX = x + dx;
+			if (screenX < 0 || screenX >= static_cast<int>(window.getWidth()))
+			{
+				continue;
+			}
+
+			const int sourceXColumn = sourceX + static_cast<int>(dx / scale);
+			if (sourceXColumn < 0 || sourceXColumn >= static_cast<int>(image.width))
+			{
+				continue;
+			}
+
+			const unsigned int pixelIndex =
+				(sourceYRow * image.width + sourceXColumn) * image.channels;
+
+			if (image.channels == 4 && image.data[pixelIndex + 3] != 0)
+			{
+				window.draw(screenX, screenY, &image.data[pixelIndex]);
+			}
+		}
+	}
+}

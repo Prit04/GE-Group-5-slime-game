@@ -126,22 +126,30 @@ void Collectible::Draw(GamesEngineeringBase::Window& window, const Vector2<float
     }
 }
 
-void Collectible::CheckHit(const Vector2<float>& otherPos, float otherRadius, ScoreManager& scoreManager)
+int Collectible::CheckHit(const Vector2<float>& otherPos, float otherRadius, ScoreManager& scoreManager)
 {
+    int collected = 0;
+
     for (int i = 0; i < MAX_CRYSTALS; i++)
     {
         if (!crystals[i].active)
         {
             continue;
         }
-        Vector2<float> position = { static_cast<float>(crystals[i].x + 5), static_cast<float>(crystals[i].y) + 5};
+
+        // Crystals are drawn in a 22x22 box, so the centre is (x + 11, y + 11)
+        Vector2<float> position = { static_cast<float>(crystals[i].x + 11), static_cast<float>(crystals[i].y + 11) };
         if (CollidesWith(otherPos, position, otherRadius))
         {
             scoreManager.AddScore(100);
             crystals[i].active = false;
+            collected++;
         }
     }
+
+    return collected;
 }
+
 
 bool Collectible::CollidesWith(const Vector2<float>& otherPos, const Vector2<float>& position, float otherRadius)
 {
